@@ -86,11 +86,11 @@ export const tweetRouter = router({
         tweetId: z.string(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { prisma, session } = ctx;
       const userId = session.user.id;
 
-      const data = prisma.like.create({
+      const data = await prisma.like.create({
         data: {
           tweet: {
             connect: {
@@ -113,11 +113,11 @@ export const tweetRouter = router({
         tweetId: z.string(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { prisma, session } = ctx;
       const userId = session.user.id;
 
-      const data = prisma.like.delete({
+      const data = await prisma.like.delete({
         where: {
           tweetId_userId: {
             tweetId: input.tweetId,

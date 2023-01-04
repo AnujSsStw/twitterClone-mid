@@ -1,4 +1,8 @@
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  QueryClient,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -64,13 +68,15 @@ const Stack = ({
   const hasLiked = data.like.length > 0;
 
   const { mutateAsync: likeIt } = trpc.tweet.like.useMutation({
-    onSuccess: (data, variables: { tweetId: string }) => {
+    onMutate: (newD) => {
       updateCache({
-        client,
-        data,
-        variables,
         action: "like",
+        client,
         inputs: filterId,
+        variables: newD,
+        data: {
+          userId: data.authorId,
+        },
       });
     },
   });

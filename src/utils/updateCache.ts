@@ -1,13 +1,26 @@
 import { InfiniteData, QueryClient } from "@tanstack/react-query";
 import { RouterInputs, RouterOutputs } from "./trpc";
 
-export const updateCache = ({
+export const updateCache = async ({
   action,
   client,
   data,
   inputs,
   variables,
 }: props) => {
+  await client.cancelQueries({
+    queryKey: [
+      ["tweet", "getAllTweet"],
+      {
+        input: {
+          limit: 10,
+          filterId: inputs,
+        },
+        type: "infinite",
+      },
+    ],
+  });
+
   client.setQueryData(
     [
       ["tweet", "getAllTweet"],
